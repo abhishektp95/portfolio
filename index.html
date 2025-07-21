@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhishek TP | Professional Motion Designer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00f0ff;
+      --primary-dark: #00a8b5;
+      --accent: #ff00aa;
+      --bg: #0a1128;
+      --text: #ffffff;
+      --glass-light: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --transition-fast: 0.3s ease;
+      --transition-medium: 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      line-height: 1.6;
+    }
+
+    /* Loader */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s var(--transition-slow);
+    }
+
+    .loader-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--glass-light);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loader p {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.5rem;
+      background: rgba(10, 17, 40, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      transition: transform 0.4s var(--transition-medium);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      position: relative;
+      transition: var(--transition-fast);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition-medium);
+    }
+
+    .nav-link:hover::after {
+      width: 80%;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      background: linear-gradient(to right, var(--text), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s var(--transition-slow) both;
+    }
+
+    .tagline {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeIn 1s var(--transition-slow) 0.3s forwards;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      color: var(--text);
+      font-size: 1.5rem;
+      transition: var(--transition-fast);
+    }
+
+    .social-link:hover {
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Sections */
+    .section {
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent), var(--primary));
+    }
+
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 0.6rem 1.8rem;
+      background: var(--glass-light);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      color: var(--text);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition-medium);
+      backdrop-filter: blur(5px);
+    }
+
+    .category-btn.active,
+    .category-btn:hover {
+      background: var(--primary);
+      color: var(--bg);
+      border-color: transparent;
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: var(--transition-slow);
+      aspect-ratio: 9/16;
+    }
+
+    .portfolio-item.animate {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .video-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Glass Overlay */
+    .glass-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--glass-light);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      opacity: 0;
+      transition: var(--transition-slow);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+    }
+
+    .portfolio-item:hover .glass-overlay {
+      opacity: 1;
+    }
+
+    .glass-overlay h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      transform: translateY(20px);
+      transition: transform 0.4s var(--transition-medium);
+    }
+
+    .glass-overlay p {
+      color: var(--text);
+      opacity: 0.9;
+      transform: translateY(20px);
+      transition: transform 0.4s var(--transition-medium) 0.1s;
+    }
+
+    .portfolio-item:hover .glass-overlay h3,
+    .portfolio-item:hover .glass-overlay p {
+      transform: translateY(0);
+    }
+
+    /* Wave Animation */
+    .wave-animation {
+      display: flex;
+      gap: 5px;
+      height: 40px;
+      align-items: flex-end;
+      margin: 1rem 0;
+      justify-content: center;
+    }
+
+    .wave-bar {
+      width: 4px;
+      background: var(--primary);
+      animation: wave 1.2s ease-in-out infinite;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; height: 20px; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; height: 30px; }
+    .wave-bar:nth-child(4) { animation-delay: 0.6s; height: 20px; }
+
+    /* Services */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .service-card {
+      background: var(--glass-light);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: var(--transition-medium);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      background: rgba(0, 240, 255, 0.1);
+    }
+
+    .service-card h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--glass-light);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: inherit;
+      transition: var(--transition-fast);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.2);
+    }
+
+    .submit-btn {
+      background: var(--primary);
+      color: var(--bg);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-medium);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      margin-top: 4rem;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--primary), transparent);
+    }
+
+    .copyright {
+      color: var(--text);
+      opacity: 0.7;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Scroll to Top */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition-medium);
+      z-index: 99;
+      box-shadow: 0 2px 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .scroll-top.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scroll-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-5px);
+    }
+
+    /* Animations */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes wave {
+      0%, 100% { height: 10px; }
+      50% { height: 30px; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 1rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 4rem 1rem;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+    <p>Loading creative universe...</p>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-links">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#work" class="nav-link">Work</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <h1>Abhishek TP</h1>
+    <p class="tagline">After Effects Specialist | 5+ Years Experience</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/abh1shyk/" target="_blank" class="social-link">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.behance.net/abh1shyk" target="_blank" class="social-link">
+        <i class="fab fa-behance"></i>
+      </a>
+      <a href="https://wa.me/9562731821" target="_blank" class="social-link">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+    <div class="wave-animation">
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+      <div class="wave-bar"></div>
+    </div>
+  </section>
+
+  <!-- Work Section -->
+  <section id="work" class="section">
+    <div class="section-title">
+      <h2>My Work</h2>
+    </div>
+    
+    <div class="category-tabs">
+      <button class="category-btn active" data-category="all">All</button>
+      <button class="category-btn" data-category="music">Music Visuals</button>
+      <button class="category-btn" data-category="modeling">Modeling Edits</button>
+      <button class="category-btn" data-category="gaming">Gaming Edits</button>
+      <button class="category-btn" data-category="reels">Social Reels</button>
+    </div>
+    
+    <div class="portfolio-grid">
+      <!-- Music Visuals -->
+      <div class="portfolio-item" data-category="music">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/travis.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Travis Visuals</h3>
+          <p>Music Visualization</p>
+          <div class="wave-animation">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modeling Edits -->
+      <div class="portfolio-item" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/hiddid.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Hiddid</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/timelss.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Timeless</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/don.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Don</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/arya.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Arya</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <!-- Gaming Edits -->
+      <div class="portfolio-item" data-category="gaming">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/valorant.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Valorant</h3>
+          <p>Gaming Montage</p>
+        </div>
+      </div>
+      
+      <!-- Social Reels -->
+      <div class="portfolio-item" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/info.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Info Reel</h3>
+          <p>Social Media Content</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/informa.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Informa</h3>
+          <p>Informative Reel</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/shit.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="glass-overlay">
+          <h3>Creative Reel</h3>
+          <p>Informative Content</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="section">
+    <div class="section-title">
+      <h2>My Services</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3>Social Media Edits</h3>
+        <p>Eye-catching content optimized for Instagram, TikTok, and YouTube Shorts with trending effects</p>
+      </div>
+      <div class="service-card">
+        <h3>Video Reels</h3>
+        <p>Professional reel editing with dynamic transitions and motion graphics</p>
+      </div>
+      <div class="service-card">
+        <h3>Modeling Edits</h3>
+        <p>Cinematic fashion edits with color grading and visual enhancements</p>
+      </div>
+      <div class="service-card">
+        <h3>Music Visuals</h3>
+        <p>Beat-synced visualizers with particle effects and lyric animations</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="section-title">
+      <h2>Get In Touch</h2>
+    </div>
+    <div class="contact-form">
+      <form>
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Your Project Details</label>
+          <textarea id="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="social-links">
+      <a href="https://www.instagram.com/abh1shyk/" target="_blank" class="social-link">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.behance.net/abh1shyk" target="_blank" class="social-link">
+        <i class="fab fa-behance"></i>
+      </a>
+      <a href="https://wa.me/9562731821" target="_blank" class="social-link">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <a href="mailto:abhiramkuttutp@gmail.com" class="social-link">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+    <div class="copyright">
+      &copy; <script>document.write(new Date().getFullYear())</script> Abhishek TP. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Remove loader after page load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelector('.loader').style.opacity = '0';
+        setTimeout(function() {
+          document.querySelector('.loader').style.display = 'none';
+        }, 800);
+      }, 1500);
+      
+      // Animate portfolio items
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
+      portfolioItems.forEach((item, index) => {
+        setTimeout(() => {
+          item.classList.add('animate');
+        }, 150 * index);
+      });
+    });
+
+    // Category filtering
+    const filterButtons = document.querySelectorAll('.category-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Update active button
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Filter items
+        const category = button.dataset.category;
+        portfolioItems.forEach(item => {
+          if (category === 'all' || item.dataset.category === category) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    });
+
+    // Scroll to top button
+    const scrollTopBtn = document.querySelector('.scroll-top');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollTopBtn.classList.add('active');
+      } else {
+        scrollTopBtn.classList.remove('active');
+      }
+    });
+    
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Typing animation for hero section
+    const typeText = () => {
+      const phrases = ["Motion Design", "Visual Effects", "Creative Edits"];
+      let currentPhrase = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const element = document.querySelector('.tagline');
+      
+      const type = () => {
+        const currentText = phrases[currentPhrase];
+        
+        if (isDeleting) {
+          element.textContent = "After Effects Specialist | " + currentText.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          element.textContent = "After Effects Specialist | " + currentText.substring(0, charIndex + 1);
+          charIndex++;
+        }
+        
+        let typeSpeed = 100;
+        
+        if (isDeleting) typeSpeed /= 2;
+        
+        if (!isDeleting && charIndex === currentText.length) {
+          typeSpeed = 2000;
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          currentPhrase = (currentPhrase + 1) % phrases.length;
+        }
+        
+        setTimeout(type, typeSpeed);
+      };
+      
+      type();
+    };
+
+    // Initialize typing animation
+    typeText();
+  </script>
+</body>
+</html>
