@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhishek TP | Motion Designer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: rgba(255, 255, 255, 0.9);
+      --primary-hover: #ffffff;
+      --bg: #0a0a12;
+      --glass-dark: rgba(20, 20, 30, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-highlight: rgba(255, 255, 255, 0.05);
+      --text: rgba(255, 255, 255, 0.9);
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(at 80% 20%, rgba(40, 40, 80, 0.3) 0%, transparent 50%),
+        radial-gradient(at 20% 80%, rgba(100, 30, 100, 0.3) 0%, transparent 50%);
+    }
+
+    /* Apple/Samsung-style Glass Components */
+    .glass-panel {
+      background: var(--glass-dark);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .glass-nav {
+      background: rgba(10, 10, 20, 0.8);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Loader */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s var(--transition);
+    }
+
+    .loader-spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.2rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 100px;
+      background: rgba(30, 30, 40, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover {
+      color: var(--primary-hover);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, var(--text), var(--primary-hover));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Portfolio Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: 16px;
+      aspect-ratio: 9/16;
+      overflow: hidden;
+      transition: transform 0.4s var(--transition);
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-8px);
+    }
+
+    .video-container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Apple-style Glass Overlay */
+    .item-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.8rem;
+      background: linear-gradient(to top, rgba(10, 10, 20, 0.9), transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--glass-border);
+      transform: translateY(100%);
+      transition: var(--transition);
+    }
+
+    .portfolio-item:hover .item-overlay {
+      transform: translateY(0);
+    }
+
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 100px;
+      border: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .category-btn.active,
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--primary-hover);
+    }
+
+    /* Sections */
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Animations */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 1rem;
+        padding: 0.7rem 1.2rem;
+      }
+      
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav glass-nav">
+    <div class="nav-links">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#work" class="nav-link">Work</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <h1>Abhishek TP</h1>
+    <p class="tagline">After Effects Specialist creating immersive motion experiences</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/abh1shyk/" target="_blank" class="social-link">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.behance.net/abh1shyk" target="_blank" class="social-link">
+        <i class="fab fa-behance"></i>
+      </a>
+      <a href="https://wa.me/9562731821" target="_blank" class="social-link">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Work Section -->
+  <section id="work" class="section">
+    <div class="section-title">
+      <h2>Selected Works</h2>
+    </div>
+    
+    <div class="category-tabs">
+      <button class="category-btn active" data-category="all">All</button>
+      <button class="category-btn" data-category="music">Music Visuals</button>
+      <button class="category-btn" data-category="modeling">Modeling Edits</button>
+      <button class="category-btn" data-category="gaming">Gaming Edits</button>
+      <button class="category-btn" data-category="reels">Social Reels</button>
+    </div>
+    
+    <div class="portfolio-grid">
+      <!-- Music Visuals -->
+      <div class="portfolio-item glass-panel" data-category="music">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/travis.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Travis Visuals</h3>
+          <p>Music Visualization</p>
+        </div>
+      </div>
+      
+      <!-- Modeling Edits -->
+      <div class="portfolio-item glass-panel" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/hiddid.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Hiddid</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item glass-panel" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/timelss.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Timeless</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item glass-panel" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/don.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Don</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item glass-panel" data-category="modeling">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/arya.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Arya</h3>
+          <p>Modeling Edit</p>
+        </div>
+      </div>
+      
+      <!-- Gaming Edits -->
+      <div class="portfolio-item glass-panel" data-category="gaming">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/valorant.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Valorant</h3>
+          <p>Gaming Montage</p>
+        </div>
+      </div>
+      
+      <!-- Social Reels -->
+      <div class="portfolio-item glass-panel" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/info.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Info Reel</h3>
+          <p>Social Media Content</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item glass-panel" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/informa.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Informa</h3>
+          <p>Informative Reel</p>
+        </div>
+      </div>
+      
+      <div class="portfolio-item glass-panel" data-category="reels">
+        <div class="video-container">
+          <video autoplay muted loop playsinline>
+            <source src="videos/shit.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item-overlay">
+          <h3>Creative Reel</h3>
+          <p>Informative Content</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="section">
+    <div class="section-title">
+      <h2>Services</h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="glass-panel" style="padding: 2rem; aspect-ratio: unset;">
+        <h3 style="margin-bottom: 1rem;">Social Media Edits</h3>
+        <p style="color: var(--text-secondary);">Eye-catching content optimized for Instagram, TikTok, and YouTube Shorts</p>
+      </div>
+      <div class="glass-panel" style="padding: 2rem; aspect-ratio: unset;">
+        <h3 style="margin-bottom: 1rem;">Video Reels</h3>
+        <p style="color: var(--text-secondary);">Professional reel editing with trending effects</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section">
+    <div class="section-title">
+      <h2>Get In Touch</h2>
+    </div>
+    <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 2rem;">
+      <form>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem;">Your Name</label>
+          <input type="text" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text);" required>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem;">Email</label>
+          <input type="email" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text);" required>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem;">Message</label>
+          <textarea style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text); min-height: 120px;" required></textarea>
+        </div>
+        <button type="submit" style="background: var(--primary); color: #000; border: none; padding: 1rem 2rem; border-radius: 100px; font-weight: 500; cursor: pointer; transition: var(--transition);">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Remove loader after page load
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelector('.loader').style.opacity = '0';
+        setTimeout(function() {
+          document.querySelector('.loader').style.display = 'none';
+        }, 500);
+      }, 1000);
+      
+      // Animate portfolio items
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
+      portfolioItems.forEach((item, index) => {
+        setTimeout(() => {
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        }, 150 * index);
+      });
+    });
+
+    // Category filtering
+    document.querySelectorAll('.category-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        // Update active button
+        document.querySelectorAll('.category-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        // Filter items
+        const category = this.dataset.category;
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+          if (category === 'all' || item.dataset.category === category) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
