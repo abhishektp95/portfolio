@@ -497,4 +497,10 @@ body {
   .section-title h2 {
     font-size: 2rem;
   }
+.glow-background {
+  animation: glowPulse 8s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0% { opacity: 0.3; transform: scale(0.95); }
+  100% { opacity: 0.7; transform: scale(1.05); }
 }
